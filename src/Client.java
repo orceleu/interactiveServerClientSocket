@@ -21,7 +21,7 @@ public class Client {
             if(command.equals("quit")) break;
             out.println(command);
             String serverReponse =input.readLine();
-            System.out.println("server says:" + serverReponse);
+            System.out.println("Server: " + serverReponse);
         }
 
         socket.close();

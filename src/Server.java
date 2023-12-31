@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Random;
 
 public class Server {
 
@@ -29,7 +30,7 @@ public class Server {
             if (request.contains("name")) {
                 out.println(getRandomName());
             } else {
-                out.println("tell me a name to get a random name.");
+                out.println("tell me 'name' to get a random name.");
             }
         }
 
@@ -45,9 +46,16 @@ public class Server {
     }
 
     private static String getRandomName() {
-        String name=names[(int) (Math.random()+ names.length -1)];
-        String adj=adjs[(int) (Math.random()+ adjs.length -1)];
-        return  name +" "+ adj;
+
+        Random rand = new Random();
+        int indexAleatoire=rand.nextInt(names.length);
+        String nomAl=names[indexAleatoire];
+        String adj=adjs[indexAleatoire];
+
+
+        /*String name=names[(int) (Math.random()+ names.length -1)];
+        String adj=adjs[(int) (Math.random()+ adjs.length -1)];*/
+        return  nomAl +" "+ adj;
 
     }
 }
