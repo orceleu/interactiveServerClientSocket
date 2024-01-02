@@ -4,7 +4,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server {
 
@@ -14,43 +17,31 @@ public class Server {
 
     private  static final int PORT =9090;
 
+private static ArrayList<ClientHandler> clients =new ArrayList<>();
+private static ExecutorService pool = Executors.newFixedThreadPool(4);
+
 
     public static void main(String[] args) throws IOException {
 
         ServerSocket listener= new ServerSocket(PORT);
-        System.out.println("[Server] waiting for connection...");
-        Socket client=listener.accept();
-        System.out.println("[Server] connected to the client!");
-        PrintWriter out =new PrintWriter(client.getOutputStream(),true);
-        BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-
-      try{
         while(true) {
-            String request = in.readLine();
-            if (request.contains("name")) {
-                out.println(getRandomName());
-            } else {
-                out.println("tell me 'name' to get a random name.");
-            }
+            System.out.println("[Server] waiting for connection...");
+            Socket client = listener.accept();
+            System.out.println("[Server] connected to the client!");
+           ClientHandler clientThread=new ClientHandler(client,clients);
+           clients.add(clientThread);
+           pool.execute(clientThread);
         }
-
-        }finally {
-          out.close();
-          in.close();
-      }
-
-       /* System.out.println("[Server] Name sent. Closing.");
-        listener.close();
-        client.close();*/
-
     }
 
-    private static String getRandomName() {
+    public static String getRandomName() {
 
         Random rand = new Random();
+        Random rand2 = new Random();
         int indexAleatoire=rand.nextInt(names.length);
+        int indexAleatoire2=rand2.nextInt(names.length);
         String nomAl=names[indexAleatoire];
-        String adj=adjs[indexAleatoire];
+        String adj=adjs[indexAleatoire2];
 
 
         /*String name=names[(int) (Math.random()+ names.length -1)];

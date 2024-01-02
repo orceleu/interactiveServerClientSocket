@@ -4,15 +4,16 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class Client {
+public class Client2 {
+
 
     private static final String SERVER_IP = "127.0.0.1";
     private static final int SERVER_PORT = 9090;
 
-    public static void main (String[] args) throws IOException{
+    public static void main (String[] args) throws IOException {
 
         Socket socket= new Socket(SERVER_IP,SERVER_PORT);
-       ServerConnection serverConn=new ServerConnection(socket);
+        ServerConnection serverConn=new ServerConnection(socket);
         BufferedReader keyBoard=new BufferedReader(new InputStreamReader(System.in));
         PrintWriter out =new PrintWriter(socket.getOutputStream(),true);
         new Thread(serverConn).start();
@@ -27,4 +28,5 @@ public class Client {
         socket.close();
         System.exit(0);
     }
+
 }
